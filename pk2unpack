@@ -1,0 +1,38 @@
+#!/usr/bin/python
+
+
+from struct import *
+import os
+import sys
+
+
+f=open(sys.argv[1])
+
+d=f.read(4)
+print "Magic:",d.encode('hex')
+d=f.read(8)
+print "Unk:",d.encode('hex'),unpack("II",d)
+
+d=f.read(12)
+print "Zeros:",d.encode('hex')
+
+d=f.read(4)
+print "FileCount?:",unpack("I",d)
+for i in range(unpack("I",d)[0]):
+	d=f.read(4)
+	print "FILE:",d
+	if d != "FILE": break
+	d=f.read(20)
+	print "Unk:",d.encode('hex'),unpack("5I",d)
+	d=f.read(4)
+	print "nameLen:",unpack("I",d)
+	len=unpack("I",d)[0]
+	name=f.read(len)
+	print "Name: ",name
+
+	d=f.read(4)
+	print "fileLen:",unpack("I",d)
+	len=unpack("I",d)[0]
+	d=f.read(len)
+	open(os.path.basename(name[:-1]),"w").write(d)
+

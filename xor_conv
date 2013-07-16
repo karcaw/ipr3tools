@@ -1,0 +1,19 @@
+#!/usr/bin/python
+
+
+from struct import *
+import os
+import sys
+
+
+key=bytearray("\xa1\x83$x\xb3ACV")
+f=open(sys.argv[1])
+o=open(sys.argv[1]+".new",'w')
+d=f.read(1000000000)
+for i in xrange(0,len(d),8):
+	b=bytearray(d[i:i+8])
+	out=bytearray(len(b))
+	for j in range(len(b)):
+		out[j]=key[j]^b[j]
+	o.write(out)
+
