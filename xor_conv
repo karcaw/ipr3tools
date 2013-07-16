@@ -6,7 +6,7 @@ import os
 import sys
 
 
-key=bytearray("\xa1\x83$x\xb3ACV")
+key=bytearray(sys.argv[2].decode('hex'))
 f=open(sys.argv[1])
 o=open(sys.argv[1]+".new",'w')
 d=f.read(1000000000)

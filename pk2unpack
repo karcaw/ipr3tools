@@ -21,18 +21,30 @@ print "FileCount?:",unpack("I",d)
 for i in range(unpack("I",d)[0]):
 	d=f.read(4)
 	print "FILE:",d
-	if d != "FILE": break
-	d=f.read(20)
-	print "Unk:",d.encode('hex'),unpack("5I",d)
-	d=f.read(4)
-	print "nameLen:",unpack("I",d)
-	len=unpack("I",d)[0]
-	name=f.read(len)
-	print "Name: ",name
+	if d == "FILE": 
+		d=f.read(20)
+		print "Unk:",d.encode('hex'),unpack("5I",d)
+		d=f.read(4)
+		print "nameLen:",unpack("I",d)
+		len=unpack("I",d)[0]
+		name=f.read(len)
+		print "Name: ",name
 
-	d=f.read(4)
-	print "fileLen:",unpack("I",d)
-	len=unpack("I",d)[0]
-	d=f.read(len)
-	open(os.path.basename(name[:-1]),"w").write(d)
+		d=f.read(4)
+		print "fileLen:",unpack("I",d)
+		len=unpack("I",d)[0]
+		d=f.read(len)
+		open(os.path.basename(name[:-1]),"w").write(d)
+		continue
 
+	if d == "CMD\000":
+		d=f.read(16)
+		print "Unk:",d.encode('hex'),unpack("4I",d)
+		d=f.read(4)
+		print "cmdLen:",unpack("I",d)
+		len=unpack("I",d)[0]
+		d=f.read(len)
+
+		open(os.path.basename("CMD"+str(len)),"w").write(d)
+		continue
+	break	
